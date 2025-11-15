@@ -1,5 +1,11 @@
 require "spec"
 require "../src/mantle"
+class DummyClient < Mantle::Client
+  def execute(prompt : String) : String
+    "Simulated response from model"
+  end
+end
+
 class DummyLogger < Mantle::Logger
     property last_message : String?
     property targeted_file : String?
