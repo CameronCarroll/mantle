@@ -19,7 +19,7 @@ module Mantle
   # Concrete logger to write formatted messages to log file
   #
   # Formats messages with a timestamp and writes to file.
-  class FileLogger
+  class FileLogger < Logger
     # Path to log file on disk
     property log_file : String
 
@@ -37,7 +37,7 @@ module Mantle
     # - `label`: A category label, eg "Context Input", "Model Response", "ERROR"
     def log(message : String, label : String)
       formatted_entry = format(message, label)
-      File.append(@log_file, formatted_entry)
+      File.write(@log_file, formatted_entry, mode: "a")
     rescue ex
       puts "Logger failed to write: #{ex.message}"
     end
@@ -46,7 +46,7 @@ module Mantle
 
     # Formats a log entry with a UTC timestamp and label.
     private def format(message : String, label : String)
-      "[#{Time.utc.to_s_iso8601}] -- [#{label}] -- #{message}"
+      "[#{Time.utc.to_s("%F")}] -- [#{label}] -- #{message}"
     end
   end
 end
